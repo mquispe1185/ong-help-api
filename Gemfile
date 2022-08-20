@@ -9,6 +9,7 @@ gem 'devise_token_auth'
 gem 'omniauth-facebook'
 gem 'omniauth-google-oauth2'
 gem 'rails', '~> 6.1.4'
+gem "active_model_serializers"
 # Use postgresql as the database for Active Record
 gem 'pg', '~> 1.1'
 # Use Puma as the app server
@@ -33,6 +34,7 @@ group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'annotate', '~> 3.0', '>= 3.0.3'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'database_cleaner'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'factory_bot_rails'
