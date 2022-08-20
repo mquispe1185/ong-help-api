@@ -24,17 +24,14 @@ module OngHelpApi
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
     config.api_only = true
-    # config.middleware.use Rack::Cors do
-    #   allow do
-    #     origins '*'
-    #     resource '*',
-    #       headers: :any,
-    #       expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
-    #       methods: [:get, :post, :options, :delete, :put]
-    #   end
-    # end
-    config.session_store :cookie_store, key: '_interslice_session'
-    config.middleware.use ActionDispatch::Cookies # Required for all session management
-    config.middleware.use ActionDispatch::Session::CookieStore, config.session_options
+    config.middleware.use Rack::Cors do
+      allow do
+        origins '*'
+        resource '*',
+          headers: :any,
+          expose: ['access-token', 'expiry', 'token-type', 'uid', 'client'],
+          methods: [:get, :post, :options, :delete, :put]
+      end
+    end
   end
 end
