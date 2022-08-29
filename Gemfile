@@ -4,6 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.6.7'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails', branch: 'main'
+gem 'active_model_serializers', '~> 0.10.2'
 gem 'devise_token_auth'
 gem 'omniauth-facebook'
 gem 'omniauth-rails_csrf_protection'
