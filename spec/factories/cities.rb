@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :city do
-    province { nil }
-    name { "MyString" }
-    active { false }
+    province
+    name { "San Salvador" }
+    active { true }
   end
 end
