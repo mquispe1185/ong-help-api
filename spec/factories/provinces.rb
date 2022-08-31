@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :province do
-    name { "MyString" }
-    active { false }
+    name { "Jujuy" }
+    active { true }
   end
 end
