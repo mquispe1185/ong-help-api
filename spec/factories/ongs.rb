@@ -1,10 +1,10 @@
 FactoryBot.define do
   factory :ong do
-    name { "MyString" }
-    description { "MyString" }
-    street { "MyString" }
-    city { nil }
-    province { nil }
+    name { Faker::Lorem.word }
+    description { "My description" }
+    street { "My street" }
+    city
+    province
     phone { 1 }
     email { "MyString" }
     facebook { "MyString" }
@@ -12,10 +12,11 @@ FactoryBot.define do
     twitter { "MyString" }
     longitude { "MyString" }
     latitude { "MyString" }
-    user { nil }
-    category { nil }
+    user
+    association :status_updated_by, factory: :user
+    category
     status { 1 }
     tags { "MyString" }
-    active { false }
+    active { true }
   end
 end
