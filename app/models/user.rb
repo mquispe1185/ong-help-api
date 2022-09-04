@@ -15,7 +15,6 @@ class User < ActiveRecord::Base
     multi_owner: 3
   }
 
-  validates :provider, :uid, :name, :image, :email, presence: true, on: :create
-  validates :nickname, :role, :first_name, :last_name, presence: true, on: :update
-
+  validates :name, :image, :email, presence: true, on: :create
+  
 end
