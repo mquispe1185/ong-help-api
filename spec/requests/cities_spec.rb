@@ -16,112 +16,126 @@ RSpec.describe "/cities", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # City. As you add validations to City, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
-  }
 
-  let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
-  }
-
-  # This should return the minimal set of values that should be in the headers
-  # in order to pass any filters (e.g. authentication) defined in
-  # CitiesController, or in your router and rack
-  # middleware. Be sure to keep this updated too.
-  let(:valid_headers) {
-    {}
-  }
-
-  describe "GET /index" do
-    it "renders a successful response" do
-      City.create! valid_attributes
-      get cities_url, headers: valid_headers, as: :json
-      expect(response).to be_successful
+  FactoryBot.define do
+    factory :prov do
+      id { Faker::Number.non_zero_digit }
+      name { Faker::Lorem.word }
     end
   end
 
-  describe "GET /show" do
-    it "renders a successful response" do
-      city = City.create! valid_attributes
-      get city_url(city), as: :json
-      expect(response).to be_successful
-    end
-  end
+  describe Province, type: :model do
+    let(:prov) { FactoryBot.create(:province) }
 
-  describe "POST /create" do
-    context "with valid parameters" do
-      it "creates a new City" do
-        expect {
+    let(:valid_attributes) {
+      { "province_id" => prov.id, "name" => "City Name" }
+    }
+
+    let(:invalid_attributes) {
+      { "province_id" => prov.id, "name" => "" }
+    }
+
+    # This should return the minimal set of values that should be in the headers
+    # in order to pass any filters (e.g. authentication) defined in
+    # CitiesController, or in your router and rack
+    # middleware. Be sure to keep this updated too.
+    let(:valid_headers) {
+      {}
+    }
+
+    describe "GET /index" do
+      it "renders a successful response" do
+        City.create! valid_attributes
+        get cities_url, headers: valid_headers, as: :json
+        expect(response).to be_successful
+        expect(City.count).to eq(1)
+      end
+    end
+
+    describe "GET /show" do
+      it "renders a successful response" do
+        city = City.create! valid_attributes
+        get city_url(city), as: :json
+        expect(response).to be_successful
+      end
+    end
+
+    describe "POST /create" do
+      context "with valid parameters" do
+        it "creates a new City" do
+          expect {
+            post cities_url,
+                params: { city: valid_attributes }, headers: valid_headers, as: :json
+          }.to change(City, :count).by(1)
+        end
+
+        it "renders a JSON response with the new city" do
+          puts "valid attributes #{valid_attributes}"
           post cities_url,
-               params: { city: valid_attributes }, headers: valid_headers, as: :json
-        }.to change(City, :count).by(1)
+              params: { city: valid_attributes }, headers: valid_headers, as: :json
+          expect(response).to have_http_status(:created)
+          expect(response.content_type).to match(a_string_including("application/json"))
+        end
       end
 
-      it "renders a JSON response with the new city" do
-        post cities_url,
-             params: { city: valid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:created)
-        expect(response.content_type).to match(a_string_including("application/json"))
-      end
-    end
+      context "with invalid parameters" do
+        it "does not create a new City" do
+          expect {
+            post cities_url,
+                params: { city: invalid_attributes }, as: :json
+          }.to change(City, :count).by(0)
+        end
 
-    context "with invalid parameters" do
-      it "does not create a new City" do
-        expect {
+        it "renders a JSON response with errors for the new city" do
           post cities_url,
-               params: { city: invalid_attributes }, as: :json
-        }.to change(City, :count).by(0)
-      end
-
-      it "renders a JSON response with errors for the new city" do
-        post cities_url,
-             params: { city: invalid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq("application/json")
-      end
-    end
-  end
-
-  describe "PATCH /update" do
-    context "with valid parameters" do
-      let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
-      }
-
-      it "updates the requested city" do
-        city = City.create! valid_attributes
-        patch city_url(city),
-              params: { city: new_attributes }, headers: valid_headers, as: :json
-        city.reload
-        skip("Add assertions for updated state")
-      end
-
-      it "renders a JSON response with the city" do
-        city = City.create! valid_attributes
-        patch city_url(city),
-              params: { city: new_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:ok)
-        expect(response.content_type).to match(a_string_including("application/json"))
-      end
-    end
-
-    context "with invalid parameters" do
-      it "renders a JSON response with errors for the city" do
-        city = City.create! valid_attributes
-        patch city_url(city),
               params: { city: invalid_attributes }, headers: valid_headers, as: :json
-        expect(response).to have_http_status(:unprocessable_entity)
-        expect(response.content_type).to eq("application/json")
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.content_type).to match(a_string_including("application/json"))
+        end
       end
     end
-  end
 
-  describe "DELETE /destroy" do
-    it "destroys the requested city" do
-      city = City.create! valid_attributes
-      expect {
-        delete city_url(city), headers: valid_headers, as: :json
-      }.to change(City, :count).by(-1)
+    describe "PATCH /update" do
+      context "with valid parameters" do
+        let(:new_attributes) {
+          { "name" => "New City Name" }
+        }
+
+        it "updates the requested city" do
+          city = City.create! valid_attributes
+          patch city_url(city),
+                params: { city: new_attributes }, headers: valid_headers, as: :json
+          city.reload
+          expect(assigns(:city).attributes['name']).to eq(new_attributes['name'])
+        end
+
+        it "renders a JSON response with the city" do
+          city = City.create! valid_attributes
+          patch city_url(city),
+                params: { city: new_attributes }, headers: valid_headers, as: :json
+          expect(response).to have_http_status(:ok)
+          expect(response.content_type).to match(a_string_including("application/json"))
+        end
+      end
+
+      context "with invalid parameters" do
+        it "renders a JSON response with errors for the city" do
+          city = City.create! valid_attributes
+          patch city_url(city),
+                params: { city: invalid_attributes }, headers: valid_headers, as: :json
+          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response.content_type).to match(a_string_including("application/json"))
+        end
+      end
+    end
+
+    describe "DELETE /destroy" do
+      it "destroys the requested city" do
+        city = City.create! valid_attributes
+        expect {
+          delete city_url(city), headers: valid_headers, as: :json
+        }.to change(City, :count).by(-1)
+      end
     end
   end
 end
