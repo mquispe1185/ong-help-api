@@ -48,7 +48,6 @@ RSpec.describe "/cities", type: :request do
         City.create! valid_attributes
         get cities_url, headers: valid_headers, as: :json
         expect(response).to be_successful
-        expect(City.count).to eq(1)
       end
     end
 
@@ -70,7 +69,6 @@ RSpec.describe "/cities", type: :request do
         end
 
         it "renders a JSON response with the new city" do
-          puts "valid attributes #{valid_attributes}"
           post cities_url,
               params: { city: valid_attributes }, headers: valid_headers, as: :json
           expect(response).to have_http_status(:created)

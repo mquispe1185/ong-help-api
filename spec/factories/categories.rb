@@ -1,6 +1,5 @@
 FactoryBot.define do
   factory :category do
-    name { "New Category" }
-    active { true }
+    name { Faker::Lorem.word }
   end
 end
