@@ -1,5 +1,6 @@
 class OngsController < ApplicationController
   before_action :set_ong, only: [:show, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:index, :show]
 
   # GET /ongs
   def index
@@ -15,7 +16,7 @@ class OngsController < ApplicationController
 
   # POST /ongs
   def create
-    @ong = Ong.new(ong_params)
+    @ong = current_user.ongs.new(ong_params)
 
     if @ong.save
       render json: @ong, status: :created, location: @ong
@@ -44,8 +45,11 @@ class OngsController < ApplicationController
       @ong = Ong.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
+    # Using a private method to encapsulate the permissible parameters
+    # is just a good pattern since you'll be able to reuse the same
+    # permit list between create and update. Also, you can specialize
+    # this method with per-user checking of permissible attributes.
     def ong_params
-      params.fetch(:ong, {})
+      params.require(:ong).permit(:name, :description, :city_id, :province_id, :phone, :email, :facebook, :instagram, :twitter, :category_id, :tags, :video_url)
     end
 end
