@@ -45,10 +45,6 @@ class OngsController < ApplicationController
       @ong = Ong.find(params[:id])
     end
 
-    # Using a private method to encapsulate the permissible parameters
-    # is just a good pattern since you'll be able to reuse the same
-    # permit list between create and update. Also, you can specialize
-    # this method with per-user checking of permissible attributes.
     def ong_params
       params.require(:ong).permit(:name, :description, :city_id, :province_id, :phone, :email, :facebook, :instagram, :twitter, :category_id, :tags, :video_url)
     end

@@ -36,7 +36,8 @@ if Ong.count.zero?
                user_id: i+1,
                category_id: i+1,
                status_updated_by_id: i+1,
-               video_url: "http://example.com/")
+               video_url: "http://example.com/",
+               updated_by_id: i+1)
   end
 end
 if Campaign.count.zero?
@@ -50,6 +51,7 @@ if Campaign.count.zero?
                user_id: i+1,
                category_id: i+1,
                status_updated_by_id: i+1,
-               video_url: "http://example.com/")
+               video_url: "http://example.com/",
+               updated_by_id: i+1)
   end
 end

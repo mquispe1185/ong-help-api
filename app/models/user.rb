@@ -8,6 +8,9 @@ class User < ActiveRecord::Base
          :omniauthable, omniauth_providers: [:google_oauth2]
   include DeviseTokenAuth::Concerns::User
 
+  has_many :ongs
+  has_many :campaigns
+  
   enum role: {
     donor: 0,
     ong_owner: 1,

@@ -1,5 +1,6 @@
 class CategoriesController < ApplicationController
   before_action :set_category, only: [:show, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:index, :show]
 
   # GET /categories
   def index
@@ -44,10 +45,6 @@ class CategoriesController < ApplicationController
       @category = Category.find(params[:id])
     end
 
-    # Using a private method to encapsulate the permissible parameters
-    # is just a good pattern since you'll be able to reuse the same
-    # permit list between create and update. Also, you can specialize
-    # this method with per-user checking of permissible attributes.
     def category_params
       params.require(:category).permit(:name)
     end

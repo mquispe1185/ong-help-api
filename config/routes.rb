@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :campaigns
   resources :cities
   resources :provinces
   resources :categories
