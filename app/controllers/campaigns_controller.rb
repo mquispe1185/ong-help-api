@@ -17,7 +17,8 @@ class CampaignsController < ApplicationController
   # POST /campaigns
   def create
     @campaign = current_user.campaigns.new(campaign_params)
-
+    @ong.updated_by_id = current_user
+    
     if @campaign.save
       render json: @campaign, status: :created, location: @campaign
     else
