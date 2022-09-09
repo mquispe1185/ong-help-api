@@ -17,7 +17,7 @@ class OngsController < ApplicationController
   # POST /ongs
   def create
     @ong = current_user.ongs.new(ong_params)
-    @ong.updated_by_id = current_user
+    @ong.updated_by = current_user
     
     if @ong.save
       render json: @ong, status: :created, location: @ong
