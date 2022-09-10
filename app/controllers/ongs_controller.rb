@@ -28,6 +28,7 @@ class OngsController < ApplicationController
 
   # PATCH/PUT /ongs/1
   def update
+    params[:ong][:updated_by_id] = current_user.id
     if @ong.update(ong_params)
       render json: @ong
     else

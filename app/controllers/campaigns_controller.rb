@@ -17,7 +17,7 @@ class CampaignsController < ApplicationController
   # POST /campaigns
   def create
     @campaign = current_user.campaigns.new(campaign_params)
-    @ong.updated_by = current_user
+    @campaign.updated_by = current_user
     
     if @campaign.save
       render json: @campaign, status: :created, location: @campaign
@@ -28,6 +28,7 @@ class CampaignsController < ApplicationController
 
   # PATCH/PUT /campaigns/1
   def update
+    params[:campaign][:updated_by_id] = current_user.id
     if @campaign.update(campaign_params)
       render json: @campaign
     else
