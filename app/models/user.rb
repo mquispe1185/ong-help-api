@@ -15,7 +15,8 @@ class User < ActiveRecord::Base
     donor: 0,
     ong_owner: 1,
     campaign_owner: 2,
-    multi_owner: 3
+    multi_owner: 3,
+    admin: 4
   }
 
   validates :name, :image, :email, presence: true, on: :create
