@@ -28,7 +28,8 @@ class CampaignsController < ApplicationController
 
   # PATCH/PUT /campaigns/1
   def update
-    params[:campaign][:updated_by_id] = current_user.id
+    @campaign.updated_by = current_user
+
     if @campaign.update(campaign_params)
       render json: @campaign
     else
