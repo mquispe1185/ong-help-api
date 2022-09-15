@@ -1,6 +1,5 @@
 FactoryBot.define do
   factory :province do
-    name { "Jujuy" }
-    active { true }
+    name { Faker::Lorem.word }
   end
 end

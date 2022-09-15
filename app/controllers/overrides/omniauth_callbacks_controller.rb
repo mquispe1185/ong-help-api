@@ -1,5 +1,6 @@
 module Overrides
     class OmniauthCallbacksController < DeviseTokenAuth::OmniauthCallbacksController
+    skip_before_action :authenticate_user!
     before_action :configure_permitted_parameters, if: :devise_controller?
       def assign_provider_attrs(user, auth_hash)
         all_attrs = auth_hash["info"].slice(*user.attributes.keys)
@@ -13,7 +14,7 @@ module Overrides
       end
 
       def configure_permitted_parameters
-        devise_parameter_sanitizer.permit(:sign_up, keys: [:nombre, :dni, :email, :rol_id,:name,:image])
+        devise_parameter_sanitizer.permit(:sign_up, keys: [:email, :name, :image])
         end
     end
 end

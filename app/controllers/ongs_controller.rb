@@ -1,5 +1,6 @@
 class OngsController < ApplicationController
   before_action :set_ong, only: [:show, :update, :destroy]
+  skip_before_action :authenticate_user!, only: [:index, :show]
 
   # GET /ongs
   def index
@@ -15,8 +16,9 @@ class OngsController < ApplicationController
 
   # POST /ongs
   def create
-    @ong = Ong.new(ong_params)
-
+    @ong = current_user.ongs.new(ong_params)
+    @ong.updated_by = current_user
+    
     if @ong.save
       render json: @ong, status: :created, location: @ong
     else
@@ -26,6 +28,8 @@ class OngsController < ApplicationController
 
   # PATCH/PUT /ongs/1
   def update
+    @ong.updated_by = current_user
+
     if @ong.update(ong_params)
       render json: @ong
     else
@@ -44,8 +48,7 @@ class OngsController < ApplicationController
       @ong = Ong.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def ong_params
-      params.fetch(:ong, {})
+      params.require(:ong).permit(:name, :description, :city_id, :province_id, :phone, :email, :facebook, :instagram, :twitter, :category_id, :tags, :video_url)
     end
 end

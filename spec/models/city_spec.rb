@@ -1,5 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe City, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:city) { FactoryBot.create(:city) }
+  
+  it 'should validate name' do
+    should validate_presence_of(:name)
+  end
 end
