@@ -3,6 +3,7 @@ FactoryBot.define do
     name      { Faker::Name.name }
     image     { Faker::Avatar.image }
     email     { Faker::Internet.email }
+    password  { 'password' }
   end
 
   trait :admin do

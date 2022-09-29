@@ -16,6 +16,11 @@ RSpec.describe "/categories", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Category. As you add validations to Category, be sure to
   # adjust the attributes here as well.
+  before(:each) do
+    @current_user = FactoryBot.create(:user)
+    @new_auth_header = @current_user.create_new_auth_token
+  end
+
   let(:valid_attributes) {
     { "name" => "Category Name" }
   }
@@ -35,7 +40,7 @@ RSpec.describe "/categories", type: :request do
   describe "GET /index" do
     it "renders a successful response" do
       Category.create! valid_attributes
-      get categories_url, headers: valid_headers, as: :json
+      get categories_url, headers: @new_auth_header
       expect(response).to be_successful
     end
   end
@@ -43,7 +48,7 @@ RSpec.describe "/categories", type: :request do
   describe "GET /show" do
     it "renders a successful response" do
       category = Category.create! valid_attributes
-      get category_url(category), as: :json
+      get category_url(category), headers: @new_auth_header
       expect(response).to be_successful
     end
   end
@@ -53,13 +58,13 @@ RSpec.describe "/categories", type: :request do
       it "creates a new Category" do
         expect {
           post categories_url,
-               params: { category: valid_attributes }, headers: valid_headers, as: :json
+               params: { category: valid_attributes }, headers: @new_auth_header
         }.to change(Category, :count).by(1)
       end
 
       it "renders a JSON response with the new category" do
         post categories_url,
-             params: { category: valid_attributes }, headers: valid_headers, as: :json
+             params: { category: valid_attributes }, headers: @new_auth_header
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -75,7 +80,7 @@ RSpec.describe "/categories", type: :request do
 
       it "renders a JSON response with errors for the new category" do
         post categories_url,
-             params: { category: invalid_attributes }, headers: valid_headers, as: :json
+             params: { category: invalid_attributes }, headers: @new_auth_header
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -91,7 +96,7 @@ RSpec.describe "/categories", type: :request do
       it "updates the requested category" do
         category = Category.create! valid_attributes
         patch category_url(category),
-              params: { category: new_attributes }, headers: valid_headers, as: :json
+              params: { category: new_attributes }, headers: @new_auth_header
         category.reload
         expect(assigns(:category).attributes['name']).to eq(new_attributes['name'])
       end
@@ -99,7 +104,7 @@ RSpec.describe "/categories", type: :request do
       it "renders a JSON response with the category" do
         category = Category.create! valid_attributes
         patch category_url(category),
-              params: { category: new_attributes }, headers: valid_headers, as: :json
+              params: { category: new_attributes }, headers: @new_auth_header
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -109,7 +114,7 @@ RSpec.describe "/categories", type: :request do
       it "renders a JSON response with errors for the category" do
         category = Category.create! valid_attributes
         patch category_url(category),
-              params: { category: invalid_attributes }, headers: valid_headers, as: :json
+              params: { category: invalid_attributes }, headers: @new_auth_header
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -120,7 +125,7 @@ RSpec.describe "/categories", type: :request do
     it "destroys the requested category" do
       category = Category.create! valid_attributes
       expect {
-        delete category_url(category), headers: valid_headers, as: :json
+        delete category_url(category), headers: @new_auth_header
       }.to change(Category, :count).by(-1)
     end
   end

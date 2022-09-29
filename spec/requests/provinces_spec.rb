@@ -16,6 +16,11 @@ RSpec.describe "/provinces", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Province. As you add validations to Province, be sure to
   # adjust the attributes here as well.
+  before(:each) do
+    @current_user = FactoryBot.create(:user)
+    @new_auth_header = @current_user.create_new_auth_token
+  end
+
   let(:valid_attributes) {
     { "name" => "Province Name" }
   }
@@ -35,7 +40,7 @@ RSpec.describe "/provinces", type: :request do
   describe "GET /index" do
     it "renders a successful response" do
       Province.create! valid_attributes
-      get provinces_url, headers: valid_headers, as: :json
+      get provinces_url, headers: @new_auth_header
       expect(response).to be_successful
     end
   end
@@ -43,7 +48,7 @@ RSpec.describe "/provinces", type: :request do
   describe "GET /show" do
     it "renders a successful response" do
       province = Province.create! valid_attributes
-      get province_url(province), as: :json
+      get province_url(province), headers: @new_auth_header
       expect(response).to be_successful
     end
   end
@@ -53,13 +58,13 @@ RSpec.describe "/provinces", type: :request do
       it "creates a new Province" do
         expect {
           post provinces_url,
-               params: { province: valid_attributes }, headers: valid_headers, as: :json
+               params: { province: valid_attributes }, headers: @new_auth_header
         }.to change(Province, :count).by(1)
       end
 
       it "renders a JSON response with the new province" do
         post provinces_url,
-             params: { province: valid_attributes }, headers: valid_headers, as: :json
+             params: { province: valid_attributes }, headers: @new_auth_header
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -75,7 +80,7 @@ RSpec.describe "/provinces", type: :request do
 
       it "renders a JSON response with errors for the new province" do
         post provinces_url,
-             params: { province: invalid_attributes }, headers: valid_headers, as: :json
+             params: { province: invalid_attributes }, headers: @new_auth_header
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -91,7 +96,7 @@ RSpec.describe "/provinces", type: :request do
       it "updates the requested province" do
         province = Province.create! valid_attributes
         patch province_url(province),
-              params: { province: new_attributes }, headers: valid_headers, as: :json
+              params: { province: new_attributes }, headers: @new_auth_header
         province.reload
         expect(assigns(:province).attributes['name']).to eq(new_attributes['name'])
       end
@@ -99,7 +104,7 @@ RSpec.describe "/provinces", type: :request do
       it "renders a JSON response with the province" do
         province = Province.create! valid_attributes
         patch province_url(province),
-              params: { province: new_attributes }, headers: valid_headers, as: :json
+              params: { province: new_attributes }, headers: @new_auth_header
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -109,7 +114,7 @@ RSpec.describe "/provinces", type: :request do
       it "renders a JSON response with errors for the province" do
         province = Province.create! valid_attributes
         patch province_url(province),
-              params: { province: invalid_attributes }, headers: valid_headers, as: :json
+              params: { province: invalid_attributes }, headers: @new_auth_header
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -120,7 +125,7 @@ RSpec.describe "/provinces", type: :request do
     it "destroys the requested province" do
       province = Province.create! valid_attributes
       expect {
-        delete province_url(province), headers: valid_headers, as: :json
+        delete province_url(province), headers: @new_auth_header
       }.to change(Province, :count).by(-1)
     end
   end

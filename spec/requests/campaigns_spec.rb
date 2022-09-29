@@ -16,12 +16,39 @@ RSpec.describe "/campaigns", type: :request do
   # This should return the minimal set of attributes required to create a valid
   # Campaign. As you add validations to Campaign, be sure to
   # adjust the attributes here as well.
+  before(:each) do
+    @current_user = FactoryBot.create(:user)
+    @new_auth_header = @current_user.create_new_auth_token
+  end
+
+  let(:category) { FactoryBot.create(:category) }
+  let(:province) { FactoryBot.create(:province) }
+  let(:city)     { FactoryBot.create(:city) }
+
   let(:valid_attributes) {
-    skip("Add a hash of attributes valid for your model")
+    { "name" => "Campaign Name",
+      "category_id" => category.id,
+      "province_id" => province.id,
+      "city_id" => city.id,
+      "user_id" => @current_user.id,
+      "updated_by_id" => @current_user.id,
+      "description" => Faker::Lorem.sentence,
+      "phone" => Faker::Number.number(digits: 10),
+      "email" => Faker::Internet.email,
+      "video_url" => Faker::Internet.url }
   }
 
   let(:invalid_attributes) {
-    skip("Add a hash of attributes invalid for your model")
+    { "name" => "",
+      "category_id" => category.id,
+      "province_id" => province.id,
+      "city_id" => city.id,
+      "user_id" => @current_user.id,
+      "updated_by_id" => @current_user.id,
+      "description" => Faker::Lorem.sentence,
+      "phone" => Faker::Number.number(digits: 10),
+      "email" => Faker::Internet.email,
+      "video_url" => Faker::Internet.url }
   }
 
   # This should return the minimal set of values that should be in the headers
@@ -53,13 +80,13 @@ RSpec.describe "/campaigns", type: :request do
       it "creates a new Campaign" do
         expect {
           post campaigns_url,
-               params: { campaign: valid_attributes }, headers: valid_headers, as: :json
+              params: { campaign: valid_attributes }, headers: @new_auth_header
         }.to change(Campaign, :count).by(1)
       end
 
       it "renders a JSON response with the new campaign" do
         post campaigns_url,
-             params: { campaign: valid_attributes }, headers: valid_headers, as: :json
+            params: { campaign: valid_attributes }, headers: @new_auth_header
         expect(response).to have_http_status(:created)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -69,13 +96,13 @@ RSpec.describe "/campaigns", type: :request do
       it "does not create a new Campaign" do
         expect {
           post campaigns_url,
-               params: { campaign: invalid_attributes }, as: :json
+              params: { campaign: invalid_attributes }, as: :json
         }.to change(Campaign, :count).by(0)
       end
 
       it "renders a JSON response with errors for the new campaign" do
         post campaigns_url,
-             params: { campaign: invalid_attributes }, headers: valid_headers, as: :json
+            params: { campaign: invalid_attributes }, headers: @new_auth_header
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -85,21 +112,21 @@ RSpec.describe "/campaigns", type: :request do
   describe "PATCH /update" do
     context "with valid parameters" do
       let(:new_attributes) {
-        skip("Add a hash of attributes valid for your model")
+        { "name" => "New Campaign Name" }
       }
 
       it "updates the requested campaign" do
         campaign = Campaign.create! valid_attributes
         patch campaign_url(campaign),
-              params: { campaign: new_attributes }, headers: valid_headers, as: :json
+              params: { campaign: new_attributes }, headers: @new_auth_header
         campaign.reload
-        skip("Add assertions for updated state")
+        expect(assigns(:campaign).attributes['name']).to eq(new_attributes['name'])
       end
 
       it "renders a JSON response with the campaign" do
         campaign = Campaign.create! valid_attributes
         patch campaign_url(campaign),
-              params: { campaign: new_attributes }, headers: valid_headers, as: :json
+              params: { campaign: new_attributes }, headers: @new_auth_header
         expect(response).to have_http_status(:ok)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -109,7 +136,7 @@ RSpec.describe "/campaigns", type: :request do
       it "renders a JSON response with errors for the campaign" do
         campaign = Campaign.create! valid_attributes
         patch campaign_url(campaign),
-              params: { campaign: invalid_attributes }, headers: valid_headers, as: :json
+              params: { campaign: invalid_attributes }, headers: @new_auth_header
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.content_type).to match(a_string_including("application/json"))
       end
@@ -120,7 +147,7 @@ RSpec.describe "/campaigns", type: :request do
     it "destroys the requested campaign" do
       campaign = Campaign.create! valid_attributes
       expect {
-        delete campaign_url(campaign), headers: valid_headers, as: :json
+        delete campaign_url(campaign), headers: @new_auth_header
       }.to change(Campaign, :count).by(-1)
     end
   end
