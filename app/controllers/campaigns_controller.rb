@@ -15,6 +15,7 @@ class CampaignsController < ApplicationController
   end
 
   # GET /campaigns/user_campaigns
+  # new path for user's dropdown with basic campaign info
   def user_campaigns
     @campaigns = current_user.campaigns
     render json: @campaigns, each_serializer: ShortCampaignSerializer

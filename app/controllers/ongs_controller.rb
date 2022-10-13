@@ -15,6 +15,7 @@ class OngsController < ApplicationController
   end
 
   # GET /ongs/user_ongs
+  # new path for user's dropdown with basic ong info
   def user_ongs
     @ongs = current_user.ongs
     render json: @ongs, each_serializer: ShortOngSerializer
