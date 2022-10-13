@@ -11,7 +11,14 @@ class CampaignsController < ApplicationController
 
   # GET /campaigns/1
   def show
-    render json: @campaign
+    render json: @campaign, serializer: FullCampaignSerializer
+  end
+
+  # GET /campaigns/user_campaigns
+  # new path for user's dropdown with basic campaign info
+  def user_campaigns
+    @campaigns = current_user.campaigns
+    render json: @campaigns, each_serializer: ShortCampaignSerializer
   end
 
   # POST /campaigns

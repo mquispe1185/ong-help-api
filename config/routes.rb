@@ -1,10 +1,18 @@
 Rails.application.routes.draw do
   resources :users, except: [:create]
-  resources :campaigns
+  resources :campaigns do
+    collection do
+      get :user_campaigns
+    end
+  end
   resources :cities
   resources :provinces
   resources :categories
-  resources :ongs
+  resources :ongs do
+    collection do
+      get :user_ongs
+    end
+  end
   # mount_devise_token_auth_for 'User', at: 'auth'
   # devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
