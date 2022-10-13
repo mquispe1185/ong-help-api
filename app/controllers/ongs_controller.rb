@@ -11,7 +11,13 @@ class OngsController < ApplicationController
 
   # GET /ongs/1
   def show
-    render json: @ong
+    render json: @ong, serializer: FullOngSerializer
+  end
+
+  # GET /ongs/user_ongs
+  def user_ongs
+    @ongs = current_user.ongs
+    render json: @ongs, each_serializer: ShortOngSerializer
   end
 
   # POST /ongs
