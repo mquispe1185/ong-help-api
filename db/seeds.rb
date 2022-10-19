@@ -55,3 +55,49 @@ if Campaign.count.zero?
                updated_by_id: i+1)
   end
 end
+if FixedCost.count.zero?
+  3.times do |i|
+    FixedCost.create(title: "Fixed Cost #{i+1}",
+                description: "This Fixed Cost description.",
+                mount: 50,
+                created_by_id: i+1,
+                status_updated_by_id: i+1,
+                chargeable_type: "Ong",
+                chargeable_id: i+1)
+    Donation.create(fixed_cost_id: i+1,
+                user_id: i+1,
+                mount: 50)
+  end
+  3.times do |i|
+    FixedCost.create(title: "Fixed Cost #{i+1}",
+                description: "This Fixed Cost description.",
+                mount: 50,
+                created_by_id: i+1,
+                status_updated_by_id: i+1,
+                chargeable_type: "Campaign",
+                chargeable_id: i+1)
+    Donation.create(fixed_cost_id: i+4,
+                user_id: i+1,
+                mount: 50)
+  end
+end
+if ItemDonation.count.zero?
+  3.times do |i|
+    ItemDonation.create(title: "Item Donation #{i+1}",
+                description: "This Item Donation description.",
+                mount: 50,
+                created_by_id: i+1,
+                status_updated_by_id: i+1,
+                donatable_type: "Ong",
+                donatable_id: i+1)
+  end
+  3.times do |i|
+    ItemDonation.create(title: "Item Donation #{i+1}",
+                description: "This Item Donation description.",
+                mount: 50,
+                created_by_id: i+1,
+                status_updated_by_id: i+1,
+                donatable_type: "Campaign",
+                donatable_id: i+1)
+  end
+end
