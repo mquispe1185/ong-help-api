@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :donations
+  resources :item_donations
+  resources :fixed_costs
   resources :users, except: [:create]
   resources :campaigns do
     collection do

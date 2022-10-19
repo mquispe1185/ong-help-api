@@ -10,6 +10,7 @@ class User < ActiveRecord::Base
 
   has_many :ongs
   has_many :campaigns
+  has_many :donations
   
   enum role: {
     donor: 0,
