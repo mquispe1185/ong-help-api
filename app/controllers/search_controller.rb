@@ -12,6 +12,9 @@ class SearchController < ApplicationController
     render json: result
   end
 
+  def create
+  end
+
   # entities for landing page
   def init_entities
     result = []
