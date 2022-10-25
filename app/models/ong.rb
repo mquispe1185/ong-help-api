@@ -10,4 +10,8 @@ class Ong < ApplicationRecord
 
   validates :name, :description, :phone, :email, :video_url, presence: true, allow_blank: false
 
+  def self.search(q)
+    where('name ilike ?',"%#{q}%")
+  end
+
 end
