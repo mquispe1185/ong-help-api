@@ -3,7 +3,15 @@ class FixedCostsController < ApplicationController
 
   # GET /fixed_costs
   def index
-    @fixed_costs = FixedCost.all
+    
+    case params[:type]
+    when 'Ong'
+      result = Ong.find(params[:id])
+    when 'Campaign'
+      result = Campaign.find(params[:id])
+    end
+
+    @fixed_costs = result.fixed_costs
 
     render json: @fixed_costs
   end

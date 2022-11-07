@@ -27,7 +27,7 @@ class OngsController < ApplicationController
     @ong.updated_by = current_user
     
     if @ong.save
-      render json: @ong, status: :created, location: @ong
+      render json: @ong, serializer: ShortOngSerializer
     else
       render json: @ong.errors, status: :unprocessable_entity
     end
