@@ -3,7 +3,15 @@ class DonationsController < ApplicationController
 
   # GET /donations
   def index
-    @donations = Donation.all
+
+    case params[:type]
+    when 'Ong'
+      result = Ong.find(params[:id])
+    when 'Campaign'
+      result = Campaign.find(params[:id])
+    end
+
+    @donations = result.donations
 
     render json: @donations
   end

@@ -3,7 +3,15 @@ class ContributionsController < ApplicationController
 
   # GET /contributions
   def index
-    @contributions = Contribution.all
+
+    case params[:type]
+    when 'Ong'
+      result = Ong.find(params[:id])
+    when 'Campaign'
+      result = Campaign.find(params[:id])
+    end
+
+    @contributions = result.contributions
 
     render json: @contributions
   end

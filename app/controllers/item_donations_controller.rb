@@ -3,7 +3,15 @@ class ItemDonationsController < ApplicationController
 
   # GET /item_donations
   def index
-    @item_donations = ItemDonation.all
+
+    case params[:type]
+    when 'Ong'
+      result = Ong.find(params[:id])
+    when 'Campaign'
+      result = Campaign.find(params[:id])
+    end
+
+    @item_donations = result.item_donations
 
     render json: @item_donations
   end
