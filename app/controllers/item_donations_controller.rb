@@ -24,6 +24,8 @@ class ItemDonationsController < ApplicationController
   # POST /item_donations
   def create
     @item_donation = ItemDonation.new(item_donation_params)
+    @item_donation.created_by_id = current_user.id
+    @item_donation.status_updated_by_id = current_user.id
 
     if @item_donation.save
       render json: @item_donation, status: :created, location: @item_donation
@@ -53,6 +55,6 @@ class ItemDonationsController < ApplicationController
     end
 
     def item_donation_params
-      params.require(:item_donation).permit(:title, :description, :mount, :month, :year)
+      params.require(:item_donation).permit(:title, :description, :mount, :donatable_type, :donatable_id, :period_id)
     end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_09_09_225257) do
+ActiveRecord::Schema.define(version: 2022_11_09_231720) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,20 @@ ActiveRecord::Schema.define(version: 2022_09_09_225257) do
     t.index ["province_id"], name: "index_cities_on_province_id"
   end
 
+  create_table "contributions", force: :cascade do |t|
+    t.bigint "item_donation_id", null: false
+    t.bigint "user_id", null: false
+    t.decimal "mount"
+    t.integer "status"
+    t.string "code"
+    t.bigint "status_updated_by_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["item_donation_id"], name: "index_contributions_on_item_donation_id"
+    t.index ["status_updated_by_id"], name: "index_contributions_on_status_updated_by_id"
+    t.index ["user_id"], name: "index_contributions_on_user_id"
+  end
+
   create_table "donations", force: :cascade do |t|
     t.bigint "fixed_cost_id", null: false
     t.bigint "user_id", null: false
@@ -102,16 +116,16 @@ ActiveRecord::Schema.define(version: 2022_09_09_225257) do
     t.integer "balance", default: 0
     t.integer "raised", default: 0
     t.bigint "created_by_id"
-    t.integer "month"
-    t.integer "year"
     t.integer "status", default: 0
     t.bigint "status_updated_by_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "chargeable_type", null: false
     t.bigint "chargeable_id", null: false
+    t.bigint "period_id", null: false
     t.index ["chargeable_type", "chargeable_id"], name: "index_fixed_costs_on_chargeable"
     t.index ["created_by_id"], name: "index_fixed_costs_on_created_by_id"
+    t.index ["period_id"], name: "index_fixed_costs_on_period_id"
     t.index ["status_updated_by_id"], name: "index_fixed_costs_on_status_updated_by_id"
   end
 
@@ -122,16 +136,16 @@ ActiveRecord::Schema.define(version: 2022_09_09_225257) do
     t.integer "balance", default: 0
     t.integer "raised", default: 0
     t.bigint "created_by_id"
-    t.integer "month"
-    t.integer "year"
     t.integer "status", default: 0
     t.bigint "status_updated_by_id"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "donatable_type", null: false
     t.bigint "donatable_id", null: false
+    t.bigint "period_id", null: false
     t.index ["created_by_id"], name: "index_item_donations_on_created_by_id"
     t.index ["donatable_type", "donatable_id"], name: "index_item_donations_on_donatable"
+    t.index ["period_id"], name: "index_item_donations_on_period_id"
     t.index ["status_updated_by_id"], name: "index_item_donations_on_status_updated_by_id"
   end
 
@@ -163,6 +177,13 @@ ActiveRecord::Schema.define(version: 2022_09_09_225257) do
     t.index ["province_id"], name: "index_ongs_on_province_id"
     t.index ["status_updated_by_id"], name: "index_ongs_on_status_updated_by_id"
     t.index ["user_id"], name: "index_ongs_on_user_id"
+  end
+
+  create_table "periods", force: :cascade do |t|
+    t.integer "month"
+    t.integer "year"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "provinces", force: :cascade do |t|
@@ -207,6 +228,9 @@ ActiveRecord::Schema.define(version: 2022_09_09_225257) do
   add_foreign_key "campaigns", "users", column: "status_updated_by_id"
   add_foreign_key "campaigns", "users", column: "updated_by_id"
   add_foreign_key "cities", "provinces"
+  add_foreign_key "contributions", "item_donations"
+  add_foreign_key "contributions", "users"
+  add_foreign_key "contributions", "users", column: "status_updated_by_id"
   add_foreign_key "donations", "fixed_costs"
   add_foreign_key "donations", "users"
   add_foreign_key "donations", "users", column: "status_updated_by_id"
@@ -215,8 +239,10 @@ ActiveRecord::Schema.define(version: 2022_09_09_225257) do
   add_foreign_key "events", "provinces"
   add_foreign_key "events", "users", column: "created_by_id"
   add_foreign_key "events", "users", column: "status_updated_by_id"
+  add_foreign_key "fixed_costs", "periods"
   add_foreign_key "fixed_costs", "users", column: "created_by_id"
   add_foreign_key "fixed_costs", "users", column: "status_updated_by_id"
+  add_foreign_key "item_donations", "periods"
   add_foreign_key "item_donations", "users", column: "created_by_id"
   add_foreign_key "item_donations", "users", column: "status_updated_by_id"
   add_foreign_key "ongs", "categories"
