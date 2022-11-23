@@ -38,7 +38,7 @@ class OngsController < ApplicationController
     @ong.updated_by = current_user
 
     if @ong.update(ong_params)
-      render json: @ong
+      render json: @ong, serializer: FullOngSerializer
     else
       render json: @ong.errors, status: :unprocessable_entity
     end
