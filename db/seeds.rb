@@ -101,3 +101,7 @@ if ItemDonation.count.zero?
                 donatable_id: i+1)
   end
 end
+
+if Period.count.zero?
+  Period.create(month: 11, year: 2022)
+end

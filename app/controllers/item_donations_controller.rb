@@ -26,6 +26,9 @@ class ItemDonationsController < ApplicationController
     @item_donation = ItemDonation.new(item_donation_params)
     @item_donation.created_by_id = current_user.id
     @item_donation.status_updated_by_id = current_user.id
+    # harcoded, to be added in frontend
+    @item_donation.period = Period.first
+
 
     if @item_donation.save
       render json: @item_donation, status: :created, location: @item_donation
