@@ -29,6 +29,7 @@ class ItemDonationsController < ApplicationController
     # harcoded, to be added in frontend
     @item_donation.period = Period.first
 
+
     if @item_donation.save
       render json: @item_donation, status: :created, location: @item_donation
     else
@@ -57,6 +58,6 @@ class ItemDonationsController < ApplicationController
     end
 
     def item_donation_params
-      params.require(:item_donation).permit(:title, :description, :mount, :month, :year)
+      params.require(:item_donation).permit(:title, :description, :mount, :donatable_type, :donatable_id, :period_id)
     end
 end
