@@ -38,7 +38,7 @@ class CampaignsController < ApplicationController
     @campaign.updated_by = current_user
 
     if @campaign.update(campaign_params)
-      render json: @campaign
+      render json: @campaign, serializer: FullCampaignSerializer
     else
       render json: @campaign.errors, status: :unprocessable_entity
     end
