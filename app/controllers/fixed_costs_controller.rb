@@ -24,6 +24,8 @@ class FixedCostsController < ApplicationController
   # POST /fixed_costs
   def create
     @fixed_cost = FixedCost.new(fixed_cost_params)
+    @fixed_cost.created_by_id = current_user.id
+    @fixed_cost.status_updated_by_id = current_user.id
 
     if @fixed_cost.save
       render json: @fixed_cost, status: :created, location: @fixed_cost
@@ -53,6 +55,6 @@ class FixedCostsController < ApplicationController
     end
 
     def fixed_cost_params
-      params.require(:fixed_cost).permit(:title, :description, :mount, :month, :year)
+      params.require(:fixed_cost).permit(:title, :description, :mount, :period_id, :chargeable_id, :chargeable_type)
     end
 end
