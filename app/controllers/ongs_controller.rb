@@ -1,5 +1,5 @@
 class OngsController < ApplicationController
-  before_action :set_ong, only: [:show, :update, :destroy]
+  before_action :set_ong, only: [:show, :update, :destroy, :set_photos]
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   # GET /ongs
@@ -49,6 +49,12 @@ class OngsController < ApplicationController
     @ong.destroy
   end
 
+  def set_photos
+    @ong.photos.attach(params[:photos])
+    #@ong.update(url_photo: "#{ENV['BASE_URL_IMG']}#{@ong.photos.first.key}")
+    render json: @ong, serializer: ShortOngSerializer
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_ong
@@ -56,6 +62,6 @@ class OngsController < ApplicationController
     end
 
     def ong_params
-      params.require(:ong).permit(:name, :description, :city_id, :province_id, :phone, :email, :facebook, :instagram, :twitter, :category_id, :tags, :video_url)
+      params.require(:ong).permit(:name, :description, :city_id, :province_id, :phone, :email, :facebook, :instagram, :twitter, :category_id, :tags, :video_url, photos: [])
     end
 end

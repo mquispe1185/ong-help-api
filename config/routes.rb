@@ -16,6 +16,9 @@ Rails.application.routes.draw do
     collection do
       get :user_ongs
     end
+    member do
+      put :set_photos
+    end
   end
   resources :search do
     collection do
@@ -27,4 +30,5 @@ Rails.application.routes.draw do
   mount_devise_token_auth_for 'User', at: 'auth', controllers: {
     omniauth_callbacks: "overrides/omniauth_callbacks"
   }
+  match '/auth/sign_out' => "devise_token_auth/sessions#destroy", via: :options
 end
