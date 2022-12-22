@@ -8,6 +8,10 @@ Rails.application.routes.draw do
     collection do
       get :user_campaigns
     end
+    member do
+      put :set_photos
+      delete :delete_photo
+    end
   end
   resources :cities
   resources :provinces
@@ -18,6 +22,7 @@ Rails.application.routes.draw do
     end
     member do
       put :set_photos
+      delete :delete_photo
     end
   end
   resources :search do

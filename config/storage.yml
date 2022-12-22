@@ -2,9 +2,10 @@ test:
   service: Disk
   root: <%= Rails.root.join("tmp/storage") %>
 
+# Use ong-app assets folder path as root
 local:
   service: Disk
-  root: <%= Rails.root.join("storage") %>
+  root: /home/jose/proyectos/ong-help-app/src/assets
 
 # Use rails credentials:edit to set the AWS secrets (as aws:access_key_id|secret_access_key)
 # amazon:

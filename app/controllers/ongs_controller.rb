@@ -1,5 +1,5 @@
 class OngsController < ApplicationController
-  before_action :set_ong, only: [:show, :update, :destroy, :set_photos]
+  before_action :set_ong, only: [:show, :update, :destroy, :set_photos, :delete_photo]
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   # GET /ongs
@@ -53,6 +53,16 @@ class OngsController < ApplicationController
     @ong.photos.attach(params[:photos])
     #@ong.update(url_photo: "#{ENV['BASE_URL_IMG']}#{@ong.photos.first.key}")
     render json: @ong, serializer: ShortOngSerializer
+  end
+
+  def delete_photo
+    photo = ActiveStorage::Attachment.find(params[:photo_id])
+    if photo
+      photo.purge
+      render json: @ong, serializer: ShortOngSerializer
+    else
+      render json: @ong.errors.full_messages, status: :unprocessable_entity
+    end
   end
 
   private

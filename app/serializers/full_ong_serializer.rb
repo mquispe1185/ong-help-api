@@ -3,7 +3,8 @@ class FullOngSerializer < ActiveModel::Serializer
   belongs_to :category
   belongs_to :city
 
+  # for develop ENV
   attribute :photos do
-    object.photos.map{|p| ActiveStorage::Blob.service.path_for(p.key)}
+    object.photos.map{|p| [p.id, ActiveStorage::Blob.service.path_for(p.key).split('src')[1]]}
   end
 end

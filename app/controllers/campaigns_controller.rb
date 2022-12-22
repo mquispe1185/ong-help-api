@@ -1,5 +1,5 @@
 class CampaignsController < ApplicationController
-  before_action :set_campaign, only: [:show, :update, :destroy]
+  before_action :set_campaign, only: [:show, :update, :destroy, :set_photos, :delete_photo]
   skip_before_action :authenticate_user!, only: [:index, :show]
 
   # GET /campaigns
@@ -49,6 +49,22 @@ class CampaignsController < ApplicationController
     @campaign.destroy
   end
 
+  def set_photos
+    @campaign.photos.attach(params[:photos])
+    #@campaign.update(url_photo: "#{ENV['BASE_URL_IMG']}#{@campaign.photos.first.key}")
+    render json: @campaign, serializer: ShortCampaignSerializer
+  end
+
+  def delete_photo
+    photo = ActiveStorage::Attachment.find(params[:photo_id])
+    if photo
+      photo.purge
+      render json: @campaign, serializer: ShortCampaignSerializer
+    else
+      render json: @campaign.errors.full_messages, status: :unprocessable_entity
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_campaign
@@ -56,6 +72,6 @@ class CampaignsController < ApplicationController
     end
 
     def campaign_params
-      params.require(:campaign).permit(:name, :description, :city_id, :province_id, :phone, :email, :facebook, :instagram, :twitter, :category_id, :tags, :video_url)
+      params.require(:campaign).permit(:name, :description, :city_id, :province_id, :phone, :email, :facebook, :instagram, :twitter, :category_id, :tags, :video_url, photos: [])
     end
 end
