@@ -3,6 +3,7 @@ test:
   root: <%= Rails.root.join("tmp/storage") %>
 
 # Use ong-app assets folder path as root
+# root: <%= Rails.root.join("storage") %>
 local:
   service: Disk
   root: /home/jose/proyectos/ong-help-app/src/assets
