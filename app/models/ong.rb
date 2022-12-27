@@ -11,6 +11,7 @@ class Ong < ApplicationRecord
   has_many :donations, through: :fixed_costs
   has_many :item_donations, as: :donatable
   has_many :contributions, through: :item_donations
+  has_many_attached :photos
   validates :name, :description, :phone, :email, :video_url, presence: true, allow_blank: false
 
   def self.search(q)
