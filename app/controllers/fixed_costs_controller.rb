@@ -27,6 +27,9 @@ class FixedCostsController < ApplicationController
     @fixed_cost.created_by_id = current_user.id
     @fixed_cost.status_updated_by_id = current_user.id
 
+    period = Period.find_or_create_by(month: params[:period][:month], year: params[:period][:year])
+    @fixed_cost.period = period
+
     if @fixed_cost.save
       render json: @fixed_cost, status: :created, location: @fixed_cost
     else
