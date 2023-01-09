@@ -18,4 +18,8 @@ class Campaign < ApplicationRecord
     where('name ilike ?',"%#{q}%")
   end
 
+  def photos_dev
+    photos.map{|p| [p.id, ActiveStorage::Blob.service.path_for(p.key).split('src')[1]]}
+  end
+
 end
