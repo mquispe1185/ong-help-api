@@ -1,6 +1,7 @@
 class Campaign < ApplicationRecord
   include Chargeable
   include Donatable
+  include Linkeable
   belongs_to :city
   belongs_to :province
   belongs_to :user
@@ -11,6 +12,7 @@ class Campaign < ApplicationRecord
   has_many :donations, through: :fixed_costs
   has_many :item_donations, as: :donatable
   has_many :contributions, through: :item_donations
+  has_many :entity_links, as: :linkeable
   has_many_attached :photos
   validates :name, :description, :phone, :email, :video_url, presence: true, allow_blank: false
 
