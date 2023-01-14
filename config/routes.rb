@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  post 'mercadopago/checkout'
   resources :entity_links
   resources :contributions
   resources :donations
