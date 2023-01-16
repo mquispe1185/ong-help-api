@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :entity_links
   resources :contributions
   resources :donations
   resources :item_donations
