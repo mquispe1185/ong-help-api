@@ -21,6 +21,12 @@ class ContributionsController < ApplicationController
     render json: @contribution
   end
 
+  # GET /contributions/user_contributions
+  def user_contributions
+    @contributions = current_user.contributions
+    render json: @contributions, each_serializer: ContributionSerializer
+  end
+
   # POST /contributions
   def create
     @contribution = Contribution.new(contribution_params)
