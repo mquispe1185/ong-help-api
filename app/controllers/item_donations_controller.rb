@@ -39,7 +39,10 @@ class ItemDonationsController < ApplicationController
 
   # PATCH/PUT /item_donations/1
   def update
+    period = Period.find_or_create_by(month: params[:period][:month], year: params[:period][:year])
     if @item_donation.update(item_donation_params)
+      @item_donation.period = period
+      @item_donation.save
       render json: @item_donation
     else
       render json: @item_donation.errors, status: :unprocessable_entity

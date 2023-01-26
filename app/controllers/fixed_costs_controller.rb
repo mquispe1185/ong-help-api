@@ -39,7 +39,10 @@ class FixedCostsController < ApplicationController
 
   # PATCH/PUT /fixed_costs/1
   def update
+    period = Period.find_or_create_by(month: params[:period][:month], year: params[:period][:year])
     if @fixed_cost.update(fixed_cost_params)
+      @fixed_cost.period = period
+      @fixed_cost.save
       render json: @fixed_cost
     else
       render json: @fixed_cost.errors, status: :unprocessable_entity
