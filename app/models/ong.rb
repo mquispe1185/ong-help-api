@@ -14,7 +14,7 @@ class Ong < ApplicationRecord
   has_many :contributions, through: :item_donations
   has_many :entity_links, as: :linkeable
   has_many_attached :photos
-  validates :name, :description, :phone, :email, :video_url, presence: true, allow_blank: false
+  validates :name, :description, :phone, :email, presence: true, allow_blank: false
 
   def self.search(q)
     where('name ilike ?',"%#{q}%")
