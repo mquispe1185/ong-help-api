@@ -19,9 +19,9 @@ class MercadopagoController < ApplicationController
         email: current_user.email,
       },
       back_urls: {
-        success: 'http://localhost:4200/ong',
-        pending: 'http://localhost:4200/ong',
-        failure: 'http://localhost:4200/ong',
+        success: 'http://localhost:4200/' + (fixed_cost.chargeable_type).downcase,
+        pending: 'http://localhost:4200/' + (fixed_cost.chargeable_type).downcase,
+        failure: 'http://localhost:4200/' + (fixed_cost.chargeable_type).downcase,
       }
     }
     preference_response = sdk.preference.create(preference_data)
